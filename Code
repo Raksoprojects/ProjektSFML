@@ -1,0 +1,30 @@
+///First code, only the start
+
+
+#include "pch.h"
+#include <iostream>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+
+int main()
+{
+
+	sf::RenderWindow window{ {1280,720}, "Winda.exe" };
+	window.setFramerateLimit(60);
+
+	while (window.isOpen()) 
+	{
+		sf::Event windowEvent;
+		while ((window.pollEvent(windowEvent))) {
+
+			if (windowEvent.type == sf::Event::Closed)
+				window.close();
+		}
+
+		window.clear(sf::Color::White);
+		window.display();
+	}
+	//hello
+}
