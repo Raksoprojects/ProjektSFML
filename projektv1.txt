@@ -1,0 +1,83 @@
+#include "pch.h"
+#include <iostream>
+#include "Winda.h"
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+
+int main()
+{
+
+	sf::RenderWindow window{ {1280,720}, "Winda.exe" };
+	window.setFramerateLimit(60);
+	Winda winda;
+
+	while (window.isOpen()) 
+	{
+		winda.draw(window);
+		sf::Event windowEvent;
+		while ((window.pollEvent(windowEvent))) {
+
+			if (windowEvent.type == sf::Event::Closed)
+				window.close();
+		}
+
+		
+		window.display();
+		window.clear();
+	}
+	//hello
+}
+
+
+
+#include "pch.h"
+#include "Winda.h"
+
+
+Winda::Winda()
+{
+	this->lift.setSize(sf::Vector2f(120, 240));
+	lift.setFillColor(sf::Color(128, 128, 128, 100));
+	lift.setOutlineThickness(10);
+	lift.setOutlineColor(sf::Color::Black);
+	lift.setPosition(sf::Vector2f(580, 0));
+}
+
+void Winda::draw(sf::RenderWindow &window)
+{
+	window.draw(lift);
+}
+
+void Winda::move(sf::RenderWindow &window) 
+{
+
+}
+
+
+
+Winda::~Winda()
+{
+}
+
+
+
+
+#pragma once
+
+#include <SFML/Graphics.hpp>
+
+class Winda
+{
+private:
+	sf::RectangleShape lift;
+	const int MaxCapacity = 600;
+
+
+public:
+	void move(sf::RenderWindow &window);
+	void draw(sf::RenderWindow &window);
+	Winda();
+	~Winda();
+};
