@@ -1,0 +1,93 @@
+// SFMLProjekt.cpp : Ten plik zawiera funkcjê „main”. W nim rozpoczyna siê i koñczy wykonywanie programu.
+//
+
+#include "pch.h"
+#include <iostream>
+#include "Winda.h"
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+
+int main()
+{
+
+	sf::RenderWindow window{ {1280,720}, "Winda.exe" };
+	window.setFramerateLimit(60);
+	Winda winda;
+
+	while (window.isOpen()) 
+	{
+		winda.draw(window);
+		sf::Event windowEvent;
+		while ((window.pollEvent(windowEvent))) {
+
+			winda.move(window, windowEvent);
+			if (windowEvent.type == sf::Event::Closed)
+				window.close();
+		}
+
+		
+		window.display();
+		window.clear();
+	}
+	//hello
+}
+
+#include "pch.h"
+#include "Winda.h"
+
+
+Winda::Winda()
+{
+	this->lift.setSize(sf::Vector2f(120, 180));
+	lift.setFillColor(sf::Color(128, 128, 128, 100));
+	lift.setOutlineThickness(10);
+	lift.setOutlineColor(sf::Color::Black);
+	lift.setPosition(sf::Vector2f(580, 0));
+}
+
+void Winda::draw(sf::RenderWindow &window)
+{
+	window.draw(lift);
+}
+
+void Winda::move(sf::RenderWindow &window, sf::Event &key) 
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) lift.move(0, 10);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) lift.move(0, -10);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) lift.move(10, 0);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) lift.move(-10, 0);
+}
+
+
+
+Winda::~Winda()
+{
+}
+
+
+
+
+
+#pragma once
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+
+class Winda
+{
+private:
+	sf::RectangleShape lift;
+	const int MaxCapacity = 600;
+	const int floors[5] = { 720,540,360,180,0 };
+
+
+public:
+	void move(sf::RenderWindow &window, sf::Event &key);
+	void draw(sf::RenderWindow &window);
+	Winda();
+	~Winda();
+};
+
