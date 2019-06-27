@@ -1,0 +1,262 @@
+#include "pch.h"
+#include <iostream>
+#include "Winda.h"
+#include <vector>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+
+
+
+
+int main()
+{
+	std::vector<int> kolejka;
+	sf::RenderWindow window{ {1280,720}, "Winda.exe" };
+	
+	window.setFramerateLimit(60);
+	Winda winda;
+	sf::Event windowEvent;
+	Human osoba;
+
+	while (window.isOpen()) 
+	{
+		winda.draw(window);
+		osoba.draw(window);
+		winda.draw_floor(window);
+		while ((window.pollEvent(windowEvent))) {
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
+			winda.move1(window, windowEvent);
+			if (windowEvent.type == sf::Event::Closed)
+				window.close();
+		}
+		
+		window.display();
+		window.clear(sf::Color(110, 110, 140));
+	}
+	//hello
+}
+
+
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+#include "Defs.h"
+#include <vector>
+#include "Human.h"
+
+
+class Winda
+{
+private:
+	
+	sf::RectangleShape lift;
+	sf::RectangleShape floor_type;
+	///std::vector<sf::Sprite> people;
+	std::vector<int> people;
+	std::vector<sf::RectangleShape> floor;
+	const int MaxCapacity = 600;
+	const int floors[4] = { 540,360,180,0 };
+	const float LIFTSPEED = 5;
+	const float NLIFTSPEED = -5;
+	
+
+
+public:
+	void move1(sf::RenderWindow &window, sf::Event &key);
+	void draw(sf::RenderWindow &window);
+	void draw_floor(sf::RenderWindow &window);
+	void add_human(sf::RenderWindow &window);
+	Winda();
+	~Winda();
+	
+};
+
+
+
+#include "pch.h"
+#include "Winda.h"
+#include <iostream>
+
+Winda::Winda()
+{
+	this->lift.setSize(sf::Vector2f(120, 180));
+	this->lift.setFillColor(sf::Color(128, 128, 128, 100));
+	this->lift.setOutlineThickness(2);
+	this->lift.setOutlineColor(sf::Color::Magenta);
+	this->lift.setPosition(sf::Vector2f(580, 540));
+
+
+
+	for (int i = 0; i < 4; i++) {
+		floor.push_back(floor_type);
+		this->floor[i].setSize(sf::Vector2f(575, 1));
+		this->floor[i].setFillColor(sf::Color(128, 128, 128, 100));
+		this->floor[i].setOutlineThickness(1);
+		this->floor[i].setOutlineColor(sf::Color::Magenta);
+		
+	}
+
+}
+
+void Winda::draw(sf::RenderWindow &window)
+{
+	window.draw(lift);
+}
+
+void Winda::move1(sf::RenderWindow &window, sf::Event &key) 
+{
+	
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)) {
+		
+		while (lift.getPosition().y != floors[0]) {
+			//std::cout << lift.getPosition().y <<"\n";
+			lift.move(sf::Vector2f(0, LIFTSPEED));
+			window.draw(lift);
+			draw_floor(window);
+			window.display();
+			window.clear(sf::Color(110, 110, 140));
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))  {
+
+		if (lift.getPosition().y > floors[1]) {
+
+			while (lift.getPosition().y != floors[1]) {
+				//std::cout << lift.getPosition().y << "\n";
+				lift.move(sf::Vector2f(0, NLIFTSPEED));
+				window.draw(lift);
+				draw_floor(window);
+				window.display();
+				window.clear(sf::Color(110, 110, 140));
+			}
+		}
+		else
+		{
+			while (lift.getPosition().y != floors[1]) {
+				//std::cout << lift.getPosition().y << "\n";
+				lift.move(sf::Vector2f(0, LIFTSPEED));
+				window.draw(lift);
+				draw_floor(window);
+				window.display();
+				window.clear(sf::Color(110, 110, 140));
+			}
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+
+		if (lift.getPosition().y > floors[2]) {
+
+			while (lift.getPosition().y != floors[2]) {
+				//std::cout << lift.getPosition().y << "\n";
+				lift.move(sf::Vector2f(0, NLIFTSPEED));
+				window.draw(lift);
+				draw_floor(window);
+				window.display();
+				window.clear(sf::Color(110, 110, 140));
+			}
+		}
+		else
+		{
+			while (lift.getPosition().y != floors[2]) {
+				//std::cout << lift.getPosition().y << "\n";
+				lift.move(sf::Vector2f(0, LIFTSPEED));
+				window.draw(lift);
+				draw_floor(window);
+				window.display();
+				window.clear(sf::Color(110, 110, 140));
+			}
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))  {
+
+
+
+		while (lift.getPosition().y != floors[3]) {
+			//std::cout << lift.getPosition().y << "\n";
+			lift.move(sf::Vector2f(0, -LIFTSPEED));
+			window.draw(lift);
+			draw_floor(window);
+			window.display();
+			window.clear(sf::Color(110, 110, 140));
+		}
+	}
+}
+
+
+void Winda::add_human(sf::RenderWindow &window) {
+
+	people.push_back(1);
+	
+}
+
+
+
+void Winda::draw_floor(sf::RenderWindow &window)
+{
+
+	for (int i = 0; i < 4; i++) {
+		this->floor[i].setPosition(sf::Vector2f(0, 180*(i+1)));
+		window.draw(floor[i]);
+	}
+}
+
+Winda::~Winda()
+{
+}
+
+
+
+#pragma once
+#include "Defs.h"
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
+
+class Human
+{
+public:
+	Human();
+	void draw(sf::RenderWindow &window);
+	void move(sf::Event &keyevent, sf::RenderWindow &window);
+	~Human();
+	
+protected:
+	sf::Sprite human;
+	sf::Texture human_tex;
+	
+};
+
+
+
+
+#include "pch.h"
+#include "Human.h"
+
+
+
+Human::Human()
+{
+	this->human.setPosition(sf::Vector2f(10, 10));
+	if(!human_tex.loadFromFile("texture.png")) std::cout<<"LOADING ERROR \n";
+	this->human.setTexture(human_tex);
+	//this->human.setScale(sf::Vector2f(0.1, 0.1));
+	this->human.setScale(sf::Vector2f(0.07, 0.07));
+}
+
+void Human::draw(sf::RenderWindow &window)
+{
+	window.draw(human);
+}
+
+
+
+
+Human::~Human()
+{
+
+}
